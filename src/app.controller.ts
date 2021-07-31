@@ -1,14 +1,19 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get } from '@nestjs/common';
+import { Administrator } from 'entities/administrator.entity';
+import { AdministratorService } from './services/administrator/administrator.service';
 
 @Controller()
 export class AppController {
+  constructor(private administratorService: AdministratorService) {}
+  
   @Get()
   getHello(): string {
     return 'Hello Gojo';
   }
 
-  @Get('jaca')
-  getJaca(): string {
-    return 'Zdravo Jaco';
+  @Get('api/administrator')
+  getAllAdmins(): Promise<Administrator[]> {
+    return this.administratorService.getAll()
   }
 }
