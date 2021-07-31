@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export class ApiResponse {
     status: string;
     statusCode: number;

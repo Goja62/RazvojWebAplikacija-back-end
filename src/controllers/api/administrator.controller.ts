@@ -27,7 +27,7 @@ export class AdministratorController {
             let admin = await this.administratorService.getById(administratorId);
 
             if (admin === undefined) {
-                resolve(new ApiResponse("error", -1002));
+                resolve(new ApiResponse("error", -1002, "Administrator not exists!"));
             }
 
             resolve(admin);

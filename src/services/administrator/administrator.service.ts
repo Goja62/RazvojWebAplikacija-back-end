@@ -51,7 +51,7 @@ export class AdministratorService {
             this.administrator.save(newAdmin)
             .then(data => resolve(data))
             .catch(error => {
-                const response: ApiResponse = new ApiResponse("error", -1001);
+                const response: ApiResponse = new ApiResponse("error", -1001, 'Administrator alredy exsits!');
                 resolve(response);
             });
         });
@@ -62,7 +62,7 @@ export class AdministratorService {
 
         if (admin === undefined) {
             return new Promise((resolve) => {
-                resolve(new ApiResponse("error", -1002));
+                resolve(new ApiResponse("error", -1002, "Administrator not exists!"));
             });
         }
 
