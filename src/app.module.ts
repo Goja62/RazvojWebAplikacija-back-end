@@ -14,8 +14,12 @@ import { Order } from 'src/entities/order.entity';
 import { Photo } from 'src/entities/photo.entity';
 import { User } from 'src/entities/user.entity';
 import { AdministratorController } from './controllers/api/administrator.controller';
+import { ArticleController } from './controllers/api/article.controller';
+import { CategoryController } from './controllers/api/category.controller';
 import { AppController } from './controllers/app.controller';
 import { AdministratorService } from './services/administrator/administrator.service';
+import { ArticleService } from './services/article/article.service';
+import { CategoryService } from './services/category/category.service';
 
 @Module({
   imports: [
@@ -58,9 +62,13 @@ import { AdministratorService } from './services/administrator/administrator.ser
   controllers: [
     AppController,
     AdministratorController,
+    CategoryController,
+    ArticleController,
   ],
   providers: [
     AdministratorService,
+    CategoryService,
+    ArticleService,
   ],
 })
 export class AppModule {}
