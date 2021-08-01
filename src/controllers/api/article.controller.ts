@@ -1,6 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Controller } from "@nestjs/common";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
+import { Body, Controller, Post } from "@nestjs/common";
 import { Crud } from "@nestjsx/crud";
+import { AddArticleDto } from "src/dtos/article/add.article.dto";
 import { Article } from "src/entities/article.entity";
 import { ArticleService } from "src/services/article/article.service";
 
@@ -40,4 +43,9 @@ export class ArticleController {
     constructor(
         public service: ArticleService,
     ) {}
+
+    @Post('createFull')  //POST http://localhost:3000/api/article/
+    createFullArticle(@Body() data: AddArticleDto) {
+        return this.service.createFullArticle(data);
+    }
 }

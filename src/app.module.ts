@@ -69,6 +69,7 @@ import { CategoryService } from './services/category/category.service';
     AdministratorService,
     CategoryService,
     ArticleService,
+    ArticlePrice,
   ],
 })
 export class AppModule {}
