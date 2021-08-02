@@ -17,11 +17,13 @@ import { AdministratorController } from './controllers/api/administrator.control
 import { ArticleController } from './controllers/api/article.controller';
 import { AuthController } from './controllers/api/auth.controller';
 import { CategoryController } from './controllers/api/category.controller';
+import { FeatureController } from './controllers/api/feature.controller';
 import { AppController } from './controllers/app.controller';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { AdministratorService } from './services/administrator/administrator.service';
 import { ArticleService } from './services/article/article.service';
 import { CategoryService } from './services/category/category.service';
+import { FeatureService } from './services/feature/feature.service';
 import { PhotoService } from './services/photo/photo.service';
 
 @Module({
@@ -68,6 +70,7 @@ import { PhotoService } from './services/photo/photo.service';
     CategoryController,
     ArticleController,
     AuthController,
+    FeatureController,
   ],
   providers: [
     AdministratorService,
@@ -75,6 +78,7 @@ import { PhotoService } from './services/photo/photo.service';
     ArticleService,
     ArticlePrice,
     PhotoService,
+    FeatureService,
   ],
   exports: [
     AdministratorService,
