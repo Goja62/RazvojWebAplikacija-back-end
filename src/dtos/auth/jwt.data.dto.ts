@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 export class JwtDataDto {
-    role: "administrator" | "user";
+    role: 'administrator' | 'user'
     id: number;
     identity: string;
     exp: number;

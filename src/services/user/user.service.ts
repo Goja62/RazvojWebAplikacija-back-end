@@ -29,7 +29,7 @@ export class UserService extends TypeOrmCrudService<User> {
 
         try {
             const savedUser = await this.user.save(newUser)
-            
+
             if (!newUser) {
                 throw new Error('')
             }
@@ -38,5 +38,22 @@ export class UserService extends TypeOrmCrudService<User> {
         } catch(e) {
             return new ApiResponse('error', -6001, 'This user account cannot be created.');
         } 
+
+    }
+
+    async getById(id) {
+        return await this.user.findOne(id)
+    }
+
+    async getByEmail(email: string): Promise<User | null> {
+        const user = await this.user.findOne({
+            email: email
+        });
+
+        if (user) {
+            return user;
+        }
+
+        return null;
     }
 }
