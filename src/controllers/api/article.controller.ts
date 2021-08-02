@@ -12,6 +12,9 @@ import { StorageConfig } from "config/storage.config";
 import { PhotoService } from "src/services/photo/photo.service";
 import { Photo } from "src/entities/photo.entity";
 import { ApiResponse } from "src/misc/api.response.class";
+import * as fileType from 'file-type'
+import * as fs from "fs"; 
+import * as sharp from 'sharp';
 
 @Controller('api/article')
 @Crud({
@@ -60,7 +63,7 @@ export class ArticleController {
     @UseInterceptors(
         FileInterceptor('photo', {
             storage: diskStorage({
-                destination: StorageConfig.photoDestination,  
+                destination: StorageConfig.photo.destination,  
                 filename: (req, file, callback) => {
                     let original = file.originalname;
 
@@ -103,7 +106,7 @@ export class ArticleController {
             },
             limits: {
                 files: 1,
-                fileSize: StorageConfig.maxSize
+                fileSize: StorageConfig.photo.maxSize
             },
         })
     )
@@ -119,7 +122,23 @@ export class ArticleController {
         if (!photo) {
             return new ApiResponse('error', -4002, 'Photo is NOT uploaded!');
         }
+
+        //Provera tipa dokumenta na pomiću file-type (mimetype)
+        const fileTypeResult = await fileType.fromFile(photo.path);
+        if (!fileTypeResult) {
+            fs.unlinkSync(photo.path);
+            return new ApiResponse('error', -4002, 'Cannot detect file type!');
+        }
+
+        const realMimeType = fileTypeResult.mime;
+        if (!(realMimeType.includes('jpeg') || realMimeType.includes('png'))) {
+            fs.unlinkSync(photo.path);
+            return new ApiResponse('error', -4002, 'Bad file content type!');
+        }
         
+        await this.createResizedImage(photo, StorageConfig.photo.resize.thumb);
+        await this.createResizedImage(photo, StorageConfig.photo.resize.small);
+
         const newPhoto: Photo = new Photo();
         newPhoto.articleId = articleId;
         newPhoto.imagePath = photo.filename;
@@ -130,6 +149,23 @@ export class ArticleController {
         }
 
         return savedPhoto;
+    }
 
+    async createResizedImage(photo, resizeSettings) {
+        const originalFilePath = photo.path;
+        const fileName = photo.filename;
+
+        const destinationFilePath =
+            StorageConfig.photo.destination +
+            resizeSettings.directory +
+            fileName;
+
+        await sharp(originalFilePath)
+            .resize({
+                fit: 'cover',
+                width: resizeSettings.width,
+                height: resizeSettings.height,
+            })
+            .toFile(destinationFilePath);
     }
 }   
