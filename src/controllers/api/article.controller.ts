@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Body, Controller, Param, Post, Req, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Param, Patch, Post, Req, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Crud } from "@nestjsx/crud";
 import { AddArticleDto } from "src/dtos/article/add.article.dto";
@@ -16,6 +16,7 @@ import * as fileType from 'file-type'
 import * as fs from "fs"; 
 import * as sharp from 'sharp';
 import { Delete } from "@nestjs/common";
+import { EditArticleDto } from "src/dtos/article/edit.article.dto";
 
 @Controller('api/article')
 @Crud({
@@ -58,6 +59,11 @@ export class ArticleController {
     @Post('createFull')  //POST http://localhost:3000/api/article/
     createFullArticle(@Body() data: AddArticleDto) {
         return this.service.createFullArticle(data);
+    }
+
+    @Patch(':id') // PATCH http://localhost:3000/api/article/2/
+    editFullArticle(@Param('id') id: number, @Body() data: EditArticleDto) {
+        return this.service.editFullArticle(id, data);
     }
 
     @Post(':id/uploadPhoto/') // POST http://localhost:3000/api/article/:id/uploadPhoto/ 
