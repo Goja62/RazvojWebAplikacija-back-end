@@ -19,6 +19,7 @@ import { Delete } from "@nestjs/common";
 import { EditArticleDto } from "src/dtos/article/edit.article.dto";
 import { RoleCheckedGuard } from "src/misc/role.checked.guard";
 import { AllowToRoles } from "src/misc/allow.to.roles.descriptor";
+import { ArticleSearchDto } from "src/dtos/article/article.search.dto";
 
 @Controller('api/article')
 @Crud({
@@ -83,7 +84,7 @@ export class ArticleController {
         return this.service.createFullArticle(data);
     }
 
-    @Patch(':id') // PATCH http://localhost:3000/api/article/2/
+    @Patch(':id') // PATCH http://localhost:3000/api/article/:id/
     @UseGuards(RoleCheckedGuard)
     @AllowToRoles('administrator')
     editFullArticle(@Param('id') id: number, @Body() data: EditArticleDto) {
@@ -237,5 +238,12 @@ export class ArticleController {
         }
 
         return new ApiResponse('ok', 0, 'One photo deleted!');
+    }
+
+    @Post('search')
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('administrator', 'user')
+    async search(@Body() data: ArticleSearchDto): Promise<Article[] | ApiResponse> {
+        return await this.service.search(data);
     }
 }   
