@@ -18,24 +18,48 @@ import { ArticlePrice } from "./article-price.entity";
 import { CartArticle } from "./cart-article.entiry";
 import { Photo } from "./photo.entity";
 import { Feature } from "./feature.entity";
-
+import * as Validator from 'class-validator';
 
 @Index("fk_article_category_id", ["categoryId"], {})
 @Entity("article")
 export class Article {
-  @PrimaryGeneratedColumn({ type: "int", name: "article_id", unsigned: true })
+  @PrimaryGeneratedColumn({ 
+    type: "int", 
+    name: "article_id", 
+    unsigned: true })
   articleId: number;
 
-  @Column({ type: "varchar", length: 128 })
+  @Column({ 
+    type: "varchar", 
+    length: 128 
+  })
+  @Validator.IsNotEmpty()
+  @Validator.IsString()
+  @Validator.Length(5, 128)
   name: string;
 
-  @Column({ type: "int", name: "category_id", unsigned: true })
+  @Column({ 
+    type: "int", 
+    name: "category_id", 
+    unsigned: true 
+  })
   categoryId: number;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ 
+    type: "varchar", 
+    length: 255 
+  })
+  @Validator.IsNotEmpty()
+  @Validator.IsString()
+  @Validator.Length(10, 255)
   excerpt: string;
 
-  @Column({ type: "text" })
+  @Column({ 
+    type: "text" 
+  })
+  @Validator.IsNotEmpty()
+  @Validator.IsString()
+  @Validator.Length(10, 10000)
   description: string;
 
   @Column({
@@ -43,6 +67,9 @@ export class Article {
     enum: ["available", "visible", "hidden"],
     default: () => "'available'"
   })
+  @Validator.IsNotEmpty()
+  @Validator.IsString()
+  @Validator.IsIn(["available", "visible", "hidden"])
   status: "available" | "visible" | "hidden";
 
   @Column({
@@ -50,6 +77,8 @@ export class Article {
     name: "is_promoted",
     unsigned: true
   })
+  @Validator.IsNotEmpty()
+  @Validator.IsIn([0, 1])
   isPromoted: number;
 
   @Column({

@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { StorageConfig } from 'config/storage.config';
@@ -12,6 +13,9 @@ async function bootstrap() {
     maxAge: StorageConfig.photo.maxAge, 
     index: false
   });
+
+  app.useGlobalPipes(new ValidationPipe());
+
   await app.listen(3000);
 }
 bootstrap();

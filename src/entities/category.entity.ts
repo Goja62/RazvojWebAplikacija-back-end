@@ -10,14 +10,17 @@ import {
 } from "typeorm";
 import { Article } from "./article.entity";
 import { Feature } from "./feature.entity";
-
+import * as Validator from 'class-validator';
 
 @Index("fk_category_parent__category_id", ["parentCategoryId"], {})
 @Index("uq_category_image_path", ["imagePath"], { unique: true })
 @Index("uq_category_name", ["name"], { unique: true })
 @Entity("category")
 export class Category {
-  @PrimaryGeneratedColumn({ type: "int", name: "category_id", unsigned: true })
+  @PrimaryGeneratedColumn({ 
+    type: "int", 
+    name: "category_id", 
+    unsigned: true })
   categoryId: number;
 
   @Column({
@@ -25,6 +28,9 @@ export class Category {
     unique: true,
     length: 32
   })
+  @Validator.IsNotEmpty()
+  @Validator.IsString()
+  @Validator.Length(5, 32)
   name: string;
 
   @Column({
@@ -33,6 +39,9 @@ export class Category {
     unique: true,
     length: 128
   })
+  @Validator.IsNotEmpty()
+  @Validator.IsString()
+  @Validator.Length(1, 128)
   imagePath: string;
 
   @Column({
