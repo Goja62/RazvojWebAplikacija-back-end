@@ -13,7 +13,7 @@ export class AdministratorOrderController {
         private orderService: OrderService,
     ) {}
     
-    @Get(':id') //// GET http://localhost:3000/api/order/:id
+    @Get(':id') // GET http://localhost:3000/api/order/:id
     @UseGuards(RoleCheckedGuard)
     @AllowToRoles('administrator')
     async get(@Param('id') id: number): Promise<Order | ApiResponse> {
@@ -26,7 +26,7 @@ export class AdministratorOrderController {
         return order;
     }
 
-    @Patch(':id')
+    @Patch(':id') // PATCH http://localhost:3000/api/order/:id
     @UseGuards(RoleCheckedGuard)
     @AllowToRoles('administrator')
     async changeStatus(@Param('id') id: number, @Body() data: ChangeOrderStatusDto): Promise<Order | ApiResponse> {
