@@ -10,6 +10,7 @@ import { AllowToRoles } from "src/misc/allow.to.roles.descriptor";
 import { ApiResponse } from "src/misc/api.response.class";
 import { RoleCheckedGuard } from "src/misc/role.checked.guard";
 import { CartService } from "src/services/cart/cart.service";
+import { OrderMailer } from "src/services/order/order.mailer.service";
 import { OrderService } from "src/services/order/order.service";
 
 @Controller('api/user/cart')
@@ -17,6 +18,7 @@ export class UserCartController {
     constructor(
         private cartService: CartService,
         private orderService: OrderService,
+        private orderMailer: OrderMailer,
     ) {}
 
     private async getActiveCartForUserId(userId: number): Promise<Cart> {
@@ -64,6 +66,8 @@ export class UserCartController {
         if (order instanceof ApiResponse) {
             return order;
         }
+
+        this.orderMailer.sendOrderEmail(order);
 
         return order;
     }
