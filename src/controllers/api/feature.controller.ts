@@ -1,12 +1,11 @@
 /* eslint-disable prettier/prettier */
-import { Get, Param, UseGuards } from "@nestjs/common";
-import { Controller } from "@nestjs/common";
+import { Controller, UseGuards, Get, Param } from "@nestjs/common";
 import { Crud } from "@nestjsx/crud";
-import DistinctFeatureValuesDto from "src/dtos/feature/distinct.feature.values.dto";
 import { Feature } from "src/entities/feature.entity";
+import { FeatureService } from "src/services/feature/feature.service";
 import { AllowToRoles } from "src/misc/allow.to.roles.descriptor";
 import { RoleCheckedGuard } from "src/misc/role.checked.guard";
-import { FeatureService } from "src/services/feature/feature.service";
+import DistinctFeatureValuesDto from "src/dtos/feature/distinct.feature.values.dto";
 
 @Controller('api/feature')
 @Crud({
@@ -35,51 +34,51 @@ import { FeatureService } from "src/services/feature/feature.service";
     },
     routes: {
         only: [
-            'createOneBase',
-            'createManyBase',
-            'updateOneBase',
-            'getOneBase',
-            'getManyBase',
+            "createOneBase",
+            "createManyBase",
+            "updateOneBase",
+            "getManyBase",
+            "getOneBase",
         ],
         createOneBase: {
             decorators: [
                 UseGuards(RoleCheckedGuard),
                 AllowToRoles('administrator'),
-            ]
+            ],
         },
         createManyBase: {
             decorators: [
                 UseGuards(RoleCheckedGuard),
                 AllowToRoles('administrator'),
-            ]
+            ],
         },
         updateOneBase: {
             decorators: [
                 UseGuards(RoleCheckedGuard),
                 AllowToRoles('administrator'),
-            ]
-        },
-        getOneBase: {
-            decorators: [
-                UseGuards(RoleCheckedGuard),
-                AllowToRoles('administrator', 'user'),
-            ]
+            ],
         },
         getManyBase: {
             decorators: [
                 UseGuards(RoleCheckedGuard),
                 AllowToRoles('administrator', 'user'),
-            ]
+            ],
         },
-    }
+        getOneBase: {
+            decorators: [
+                UseGuards(RoleCheckedGuard),
+                AllowToRoles('administrator', 'user'),
+            ],
+        },
+    },
 })
 export class FeatureController {
     constructor(public service: FeatureService) { }
 
-    @Get('values/:categoryId')  // POST http://localhost:3000/api/feature/values/:categoryId
+    @Get('values/:categoryId')
     @UseGuards(RoleCheckedGuard)
     @AllowToRoles('administrator', 'user')
     async getDistinctValuesByCategoryId(@Param('categoryId') categoryId: number): Promise<DistinctFeatureValuesDto> {
-        return await this.service.getDistinctValuesByCategoryId(categoryId)
+        return await this.service.getDistinctValuesByCategoryId(categoryId);
     }
 }

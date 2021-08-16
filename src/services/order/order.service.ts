@@ -11,6 +11,7 @@ export class OrderService {
     constructor(
         @InjectRepository(Cart) private readonly cart: Repository<Cart>,
         @InjectRepository(Order) private readonly order: Repository<Order>,
+        
     ) { }
 
     async add(cartId: number): Promise<Order | ApiResponse> {
@@ -45,6 +46,22 @@ export class OrderService {
 
     async getById(orderId: number) {
         return await this.order.findOne(orderId, {
+            relations: [
+                "cart",
+                "cart.user",
+                "cart.cartArticles",
+                "cart.cartArticles.article",
+                "cart.cartArticles.article.category",
+                "cart.cartArticles.article.articlePrices",
+            ],
+        });
+    }
+
+    async getAllByUserId(userId: number) {
+        return await this.order.find({
+            where: {
+                userId: userId,
+            },
             relations: [
                 "cart",
                 "cart.user",

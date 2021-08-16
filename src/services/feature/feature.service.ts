@@ -6,7 +6,6 @@ import DistinctFeatureValuesDto from "src/dtos/feature/distinct.feature.values.d
 import { ArticleFeature } from "src/entities/article-feature.entity";
 import { Feature } from "src/entities/feature.entity";
 import { Repository } from "typeorm";
-import { resourceLimits } from "worker_threads";
 
 @Injectable()
 export class FeatureService extends TypeOrmCrudService<Feature> {
@@ -22,31 +21,31 @@ export class FeatureService extends TypeOrmCrudService<Feature> {
             categoryId: categoryId,
         });
 
-        const featureResult: DistinctFeatureValuesDto = {
-            features: []
+        const result: DistinctFeatureValuesDto = {
+            features: [],
         };
 
         if (!features || features.length === 0) {
-            return featureResult;
+            return result;
         }
 
-        featureResult.features = await Promise.all(features.map(async feature => {
-            const values: string[] = 
+        result.features = await Promise.all(features.map(async feature => {
+            const values: string[] =
                 (
                     await this.articleFeature.createQueryBuilder("af")
                     .select("DISTINCT af.value", 'value')
-                    .where("af.featureId = :featureId", { featureId: feature.featureId })
-                    .orderBy("af.value", "ASC")
+                    .where('af.featureId = :featureId', { featureId: feature.featureId })
+                    .orderBy('af.value', 'ASC')
                     .getRawMany()
-                ).map(item => item.value)
+                ).map(item => item.value);
 
             return {
                 featureId: feature.featureId,
                 name: feature.name,
                 values: values,
-            }
+            };
         }));
 
-        return featureResult;
+        return result;
     }
 }

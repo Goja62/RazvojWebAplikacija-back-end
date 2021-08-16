@@ -71,5 +71,12 @@ export class UserCartController {
 
         return order;
     }
+
+    @Get('orders')  // GET http://localhost:3000/api/user/cart/orders
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('user')
+    async getOrders(@Req() req: Request): Promise<Order[]> {
+        return await this.orderService.getAllByUserId(req.token.id);
+    }
     
 }
