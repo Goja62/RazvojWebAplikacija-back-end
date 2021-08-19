@@ -20,7 +20,7 @@ export class AddArticleDto {
     @Validator.Length(64, 10000)
     description: string;
 
-    price: number;
+    
     @Validator.IsNotEmpty()
     @Validator.IsPositive()
     @Validator.IsNumber({
@@ -28,6 +28,7 @@ export class AddArticleDto {
         allowNaN: false,
         maxDecimalPlaces: 2,
     })
+    price: number;
 
     @Validator.IsArray()
     @Validator.ValidateNested({
