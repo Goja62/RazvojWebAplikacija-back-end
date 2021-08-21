@@ -4,7 +4,7 @@ import { Order } from "src/entities/order.entity";
 import { AllowToRoles } from "src/misc/allow.to.roles.descriptor";
 import { ApiResponse } from "src/misc/api.response.class";
 import { RoleCheckedGuard } from "src/misc/role.checked.guard";
-import { ChangeOrderStatusDto } from "src/services/order/changeOrderStatus.dto";
+import { ChangeOrderStatusDto } from "src/dtos/order/changeOrderStatus.dto";
 import { OrderService } from "src/services/order/order.service";
 
 @Controller('api/order')
@@ -12,6 +12,13 @@ export class AdministratorOrderController {
     constructor(
         private orderService: OrderService,
     ) {}
+
+    @Get() // GET http://localhost:3000/api/order/
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('administrator')
+    async getAll(): Promise<Order[]> {
+        return await this.orderService.getAll()
+    }
     
     @Get(':id') // GET http://localhost:3000/api/order/:id
     @UseGuards(RoleCheckedGuard)

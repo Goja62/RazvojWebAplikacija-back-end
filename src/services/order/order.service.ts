@@ -85,7 +85,18 @@ export class OrderService {
         await this.order.save(order);
 
         return await this.getById(orderId)
+    }
 
-
+    async getAll() {
+        return await this.order.find({
+            relations: [
+                "cart",
+                "cart.user",
+                "cart.cartArticles",
+                "cart.cartArticles.article",
+                "cart.cartArticles.article.category",
+                "cart.cartArticles.article.articlePrices",
+            ],
+        });
     }
 }
